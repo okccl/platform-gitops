@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ${{ values.appName }}
-  labels:
-    policy-enforced: "true"
-    goldilocks.fairwinds.com/enabled: "true"

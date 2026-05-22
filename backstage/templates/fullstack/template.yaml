@@ -18,6 +18,7 @@ spec:
       required:
         - name
         - description
+        - owner
       properties:
         name:
           title: アプリ名
@@ -29,6 +30,11 @@ spec:
           title: アプリの説明
           type: string
           description: アプリの説明（Backstage カタログに使用）
+        owner:
+          title: オーナーグループ
+          type: string
+          description: アプリを所有する Keycloak グループ名（RBAC 設定に使用）
+          default: app-developer
         withDb:
           title: PostgreSQL DB を使用する
           type: boolean
@@ -86,6 +92,7 @@ spec:
           appName: ${{ parameters.name }}
           description: ${{ parameters.description }}
           withDb: ${{ parameters.withDb }}
+          owner: ${{ parameters.owner }}
 
     - id: publish-gitops
       name: apps-gitops へ PR 作成

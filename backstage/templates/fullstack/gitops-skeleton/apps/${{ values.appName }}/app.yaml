@@ -1,0 +1,3 @@
+appName: ${{ values.appName }}
+namespace: ${{ values.appName }}
+owner: ${{ values.owner }}
