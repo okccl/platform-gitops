@@ -1,0 +1,12 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: {{ .Values.appName }}
+  namespace: argocd
+spec:
+  sourceRepos:
+    - https://github.com/okccl/*
+  destinations:
+    - namespace: {{ .Values.namespace }}
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist: []

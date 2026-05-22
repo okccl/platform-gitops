@@ -1,0 +1,4 @@
+apiVersion: v2
+name: user-app-infra
+version: 0.1.0
+description: ユーザーアプリの AppProject・Namespace を生成するチャート

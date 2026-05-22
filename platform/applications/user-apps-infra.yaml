@@ -1,23 +1,36 @@
 apiVersion: argoproj.io/v1alpha1
-kind: Application
+kind: ApplicationSet
 metadata:
   name: user-apps-infra
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "21"
 spec:
-  project: default
-  source:
-    repoURL: https://github.com/okccl/platform-gitops.git
-    targetRevision: main
-    path: platform/user-apps-infra
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argocd
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
-      - ServerSideApply=true
+  generators:
+    - git:
+        repoURL: https://github.com/okccl/apps-gitops.git
+        revision: HEAD
+        files:
+          - path: "apps/*/app.yaml"
+  template:
+    metadata:
+      name: "user-apps-infra-{{appName}}"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/okccl/platform-gitops.git
+        targetRevision: main
+        path: platform/user-apps-infra
+        helm:
+          values: |
+            appName: "{{appName}}"
+            namespace: "{{namespace}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: argocd
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - ServerSideApply=true
