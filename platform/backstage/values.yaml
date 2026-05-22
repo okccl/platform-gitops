@@ -79,11 +79,7 @@ backstage:
     integrations:
       github:
         - host: github.com
-          apps:
-            - appId: ${GITHUB_APP_ID}
-              clientId: ${GITHUB_APP_CLIENT_ID}
-              clientSecret: ${GITHUB_APP_CLIENT_SECRET}
-              privateKey: ${GITHUB_APP_PRIVATE_KEY}
+          token: ${GITHUB_PAT}
     catalog:
       locations:
         - type: url
@@ -143,26 +139,11 @@ backstage:
         secretKeyRef:
           name: backstage-secret
           key: KEYCLOAK_CLIENT_SECRET
-    - name: GITHUB_APP_ID
+    - name: GITHUB_PAT
       valueFrom:
         secretKeyRef:
           name: backstage-secret
-          key: GITHUB_APP_ID
-    - name: GITHUB_APP_CLIENT_ID
-      valueFrom:
-        secretKeyRef:
-          name: backstage-secret
-          key: GITHUB_APP_CLIENT_ID
-    - name: GITHUB_APP_CLIENT_SECRET
-      valueFrom:
-        secretKeyRef:
-          name: backstage-secret
-          key: GITHUB_APP_CLIENT_SECRET
-    - name: GITHUB_APP_PRIVATE_KEY
-      valueFrom:
-        secretKeyRef:
-          name: backstage-secret
-          key: GITHUB_APP_PRIVATE_KEY
+          key: GITHUB_PAT
     - name: GITHUB_OAUTH_CLIENT_ID
       valueFrom:
         secretKeyRef:
