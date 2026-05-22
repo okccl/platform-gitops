@@ -6,24 +6,29 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
-  project: user-apps
+  project: ${{ values.appName }}
   sources:
     - repoURL: https://github.com/okccl/platform-charts.git
       targetRevision: main
       path: charts/generic-backend
       helm:
         valueFiles:
-          - $values/apps/${{ values.appName }}-backend/values.yaml
-    - repoURL: https://github.com/okccl/platform-gitops.git
+          - $values/apps/${{ values.appName }}/${{ values.appName }}-backend/values.yaml
+    - repoURL: https://github.com/okccl/apps-gitops.git
       targetRevision: main
       ref: values
-    - repoURL: https://github.com/okccl/platform-gitops.git
+    - repoURL: https://github.com/okccl/apps-gitops.git
       targetRevision: main
-      path: apps/${{ values.appName }}-backend/manifests
+      path: apps/${{ values.appName }}/${{ values.appName }}-backend/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: ${{ values.appName }}
   ignoreDifferences:
+    - group: postgresql.cnpg.io
+      kind: Cluster
+      jsonPointers:
+        - /spec/bootstrap
+        - /spec/externalClusters
     - group: argoproj.io
       kind: Rollout
       jsonPointers:
