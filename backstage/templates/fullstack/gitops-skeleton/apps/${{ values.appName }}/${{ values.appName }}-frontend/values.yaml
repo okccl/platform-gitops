@@ -3,4 +3,37 @@ app:
 image:
   repository: ghcr.io/okccl/${{ values.appName }}-frontend
   tag: latest
+  pullPolicy: IfNotPresent
 containerPort: 80
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+probes:
+  liveness:
+    path: /
+    initialDelaySeconds: 5
+    periodSeconds: 10
+  readiness:
+    path: /
+    initialDelaySeconds: 5
+    periodSeconds: 5
+ingress:
+  enabled: false
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+serviceMonitor:
+  enabled: false
+rollout:
+  enabled: true
+  canary:
+    steps:
+      - setWeight: 20
+      - pause: {}
+      - setWeight: 100

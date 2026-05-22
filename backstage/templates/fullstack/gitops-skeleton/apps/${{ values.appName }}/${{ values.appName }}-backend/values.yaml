@@ -3,7 +3,47 @@ app:
 image:
   repository: ghcr.io/okccl/${{ values.appName }}-backend
   tag: latest
+  pullPolicy: IfNotPresent
 containerPort: 8000
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+probes:
+  liveness:
+    path: /health
+    initialDelaySeconds: 10
+    periodSeconds: 10
+  readiness:
+    path: /health
+    initialDelaySeconds: 5
+    periodSeconds: 5
+ingress:
+  enabled: false
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+serviceMonitor:
+  enabled: true
+  path: /metrics
+  interval: 30s
+env:
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "http://tempo.tracing.svc.cluster.local:4318"
+  - name: OTEL_SERVICE_NAME
+    value: "${{ values.appName }}-backend"
+rollout:
+  enabled: true
+  canary:
+    steps:
+      - setWeight: 20
+      - pause: {}
+      - setWeight: 100
 db:
   enabled: ${{ values.withDb }}
   name: ${{ values.appName }}-db
