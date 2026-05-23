@@ -43,12 +43,12 @@ jobs:
           git diff --cached --quiet || git commit -m "chore: remove ${{ github.event.inputs.appName }} gitops manifests"
           git push
 
-      - name: GitHub リポジトリ削除
+      - name: GitHub リポジトリ削除（手動対応）
         run: |
-          gh repo delete okccl/${{ github.event.inputs.appName }}-backend --yes || true
-          gh repo delete okccl/${{ github.event.inputs.appName }}-frontend --yes || true
-        env:
-          GH_TOKEN: ${{ steps.token.outputs.token }}
+          echo "⚠️  GitHub リポジトリの削除は手動で実施してください。"
+          echo "  gh repo delete okccl/${{ github.event.inputs.appName }}-backend --yes"
+          echo "  gh repo delete okccl/${{ github.event.inputs.appName }}-frontend --yes"
+          echo "  ※ delete_repo スコープは GitHub App token では取得不可のため自動化できません。"
 
       - name: GHCR パッケージ削除
         run: |
