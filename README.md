@@ -202,7 +202,7 @@ push to main（sample-backend / sample-frontend）
 
 ### 設計上の決定事項
 - image tag の更新は PR 経由とし、デプロイの履歴を Git に残す。
-- `GITOPS_TOKEN`（PAT）を GitHub Actions の Secret に登録し、クロスリポジトリの `repository_dispatch` を実現する。
+- クロスリポジトリの `repository_dispatch` は `okccl-gitops` GitHub App（`GITOPS_APP_CLIENT_ID` / `GITOPS_APP_PRIVATE_KEY`）で認証する。当初は PAT（`GITOPS_TOKEN`）を使用していたが GitHub App に移行済み。
 
 ---
 
