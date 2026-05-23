@@ -24,8 +24,8 @@ jobs:
         id: token
         uses: actions/create-github-app-token@v3.1.1
         with:
-          client-id: ${{ vars.BACKSTAGE_APP_CLIENT_ID }}
-          private-key: ${{ secrets.BACKSTAGE_APP_PRIVATE_KEY }}
+          client-id: ${{ vars.GITOPS_APP_CLIENT_ID }}
+          private-key: ${{ secrets.GITOPS_APP_PRIVATE_KEY }}
           owner: okccl
 
       - name: apps-gitops のチェックアウト
@@ -36,8 +36,7 @@ jobs:
 
       - name: GitOps マニフェスト削除
         run: |
-          rm -rf apps/${{ github.event.inputs.appName }}-backend
-          rm -rf apps/${{ github.event.inputs.appName }}-frontend
+          rm -rf apps/${{ github.event.inputs.appName }}
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
@@ -54,8 +53,8 @@ jobs:
       - name: GHCR パッケージ削除
         run: |
           gh api --method DELETE \
-            /orgs/okccl/packages/container/${{ github.event.inputs.appName }}-backend || true
+            /user/packages/container/${{ github.event.inputs.appName }}-backend || true
           gh api --method DELETE \
-            /orgs/okccl/packages/container/${{ github.event.inputs.appName }}-frontend || true
+            /user/packages/container/${{ github.event.inputs.appName }}-frontend || true
         env:
           GH_TOKEN: ${{ steps.token.outputs.token }}

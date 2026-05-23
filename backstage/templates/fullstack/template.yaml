@@ -61,6 +61,8 @@ spec:
         defaultBranch: main
         sourcePath: ./backend
         repoVisibility: public
+        repoVariables:
+          GITOPS_APP_CLIENT_ID: Iv23liMGIykpOssjwg6a
 
     - id: fetch-frontend
       name: フロントエンドスケルトン生成
@@ -81,6 +83,8 @@ spec:
         defaultBranch: main
         sourcePath: ./frontend
         repoVisibility: public
+        repoVariables:
+          GITOPS_APP_CLIENT_ID: Iv23liMGIykpOssjwg6a
 
     - id: fetch-gitops
       name: GitOps ファイル生成
