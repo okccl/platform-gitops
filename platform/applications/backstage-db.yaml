@@ -29,7 +29,6 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
-      - RespectIgnoreDifferences=true
   ignoreDifferences:
     - group: postgresql.cnpg.io
       kind: Cluster
