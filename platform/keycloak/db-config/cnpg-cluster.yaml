@@ -1,33 +1,34 @@
+# DR マニフェスト: keycloak-db
+# generate-dr-manifests で生成。DR 完了後は以下で元に戻すこと:
+#   cd ~/platform-gitops && git checkout -- platform/keycloak/db-config/cnpg-cluster.yaml
+---
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: keycloak-db
   namespace: keycloak
   annotations:
-    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-wave: '5'
 spec:
   instances: 1
   imageName: ghcr.io/cloudnative-pg/postgresql:17
   bootstrap:
-    initdb:
-      database: keycloak
-      owner: keycloak
-      secret:
-        name: keycloak-db-credentials
+    recovery:
+      source: minio-backup
   storage:
     size: 2Gi
     storageClass: local-path-retain
   resources:
     requests:
-      memory: "256Mi"
-      cpu: "100m"
+      memory: 256Mi
+      cpu: 100m
     limits:
-      memory: "512Mi"
-      cpu: "500m"
+      memory: 512Mi
+      cpu: 500m
   backup:
     barmanObjectStore:
-      endpointURL: "http://host.k3d.internal:9000"
-      destinationPath: "s3://cnpg-backup/keycloak-db"
+      endpointURL: http://host.k3d.internal:9000
+      destinationPath: s3://cnpg-backup/keycloak-db
       s3Credentials:
         accessKeyId:
           name: minio-backup-secret
@@ -39,6 +40,23 @@ spec:
         compression: gzip
       data:
         compression: gzip
-    retentionPolicy: "7d"
+    retentionPolicy: 7d
   monitoring:
     enablePodMonitor: true
+  externalClusters:
+  - name: minio-backup
+    barmanObjectStore:
+      endpointURL: http://host.k3d.internal:9000
+      destinationPath: s3://cnpg-backup/keycloak-db
+      serverName: keycloak-db
+      s3Credentials:
+        accessKeyId:
+          name: minio-backup-secret
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: minio-backup-secret
+          key: ACCESS_SECRET_KEY
+      wal:
+        compression: gzip
+      data:
+        compression: gzip
