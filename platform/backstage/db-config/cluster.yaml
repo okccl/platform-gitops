@@ -1,6 +1,5 @@
 # DR マニフェスト: backstage-db
-# generate-dr-manifests で生成。DR 完了後は以下で元に戻すこと:
-#   cd ~/platform-gitops && git checkout -- platform/backstage/db-config/cluster.yaml
+# generate-dr-manifests で生成（20260526）。gitops は recovery のまま維持する。
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
@@ -34,6 +33,7 @@ spec:
         compression: gzip
       data:
         compression: gzip
+      serverName: backstage-db-20260526
     retentionPolicy: 7d
   monitoring:
     enablePodMonitor: true
