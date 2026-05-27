@@ -1,5 +1,5 @@
 # DR マニフェスト: backstage-db
-# generate-dr-manifests で生成（20260526）。gitops は recovery のまま維持する。
+# generate-dr-manifests で生成（20260527）。gitops は recovery のまま維持する。
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
@@ -33,7 +33,7 @@ spec:
         compression: gzip
       data:
         compression: gzip
-      serverName: backstage-db-20260526
+      serverName: backstage-db-20260527
     retentionPolicy: 7d
   monitoring:
     enablePodMonitor: true
@@ -42,7 +42,7 @@ spec:
     barmanObjectStore:
       endpointURL: http://host.k3d.internal:9000
       destinationPath: s3://cnpg-backup/backstage-db
-      serverName: backstage-db
+      serverName: backstage-db-20260526
       s3Credentials:
         accessKeyId:
           name: minio-backup-secret
